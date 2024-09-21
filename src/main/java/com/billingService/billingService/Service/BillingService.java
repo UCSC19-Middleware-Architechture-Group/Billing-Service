@@ -1,13 +1,18 @@
 package com.billingService.billingService.Service;
 
+import com.billingService.billingService.DTO.BillingDTO;
+import com.billingService.billingService.DTO.PaymentDTO;
 import com.billingService.billingService.Entity.*;
 import com.billingService.billingService.Repository.*;
+import jakarta.persistence.Column;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BillingService {
@@ -22,20 +27,31 @@ public class BillingService {
         return billingRepository.findById(billingId).orElse(null);
     }
 
-    public void processPayment(PaymentRequest paymentRequest) {
-        PaymentHistory paymentHistory = new PaymentHistory();
-        paymentHistory.setUserId(paymentRequest.getUserId());
-        paymentHistory.setAmount(paymentRequest.getAmount());
-        paymentHistory.setDate(paymentRequest.getDate());
+    public BillingDTO createBillingDetails(@Valid BillingDTO billingDetails) {
+        BillingDetails billing = new BillingDetails();
+        billing.setName(billingDetails.getName());
+        billing.setDuration(billingDetails.getDuration());
+        billing.setAmount(billingDetails.getAmount());
+        billing.setDescription(billingDetails.getDescription());
+        billing.setCreated_at(LocalDate.now());
 
-        paymentHistoryRepository.save(paymentHistory);
+        billingRepository.save(billing);
+
+        return billingDetails;
     }
 
-    public List<PaymentHistory> getPaymentHistory(Long userId) {
-        return paymentHistoryRepository.findByUserId(userId);
-    }
+    public BillingDTO updateBillingDetails(@Valid Long billingId, BillingDTO billingDetails) {
+        BillingDetails billing = billingRepository.findById(billingId).orElse(null);
+        if (billing != null) {
+            billing.setName(billingDetails.getName());
+            billing.setDuration(billingDetails.getDuration());
+            billing.setAmount(billingDetails.getAmount());
+            billing.setDescription(billingDetails.getDescription());
+            billing.setUpdated_at(LocalDate.now());
 
-    public void createBillingDetails(BillingDetails billingDetails) {
-        billingRepository.save(billingDetails);
+            billingRepository.save(billing);
+        }
+
+        return billingDetails;
     }
 }

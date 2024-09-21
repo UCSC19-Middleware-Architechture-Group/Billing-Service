@@ -71,7 +71,7 @@ public class EmailService {
                 contentStream.newLineAtOffset(0, -20);
                 contentStream.showText("Amount: " + payment.getAmount());
                 contentStream.newLineAtOffset(0, -20);
-                contentStream.showText("Date: " + payment.getDate());
+                contentStream.showText("Date: " + payment.getPaymentDate());
             }
 
             contentStream.endText();
