@@ -1,7 +1,7 @@
-package com.billingService.billingService.Exceptions;
+package com.sritel.billing.Exceptions;
 
 
-import com.billingService.billingService.DTO.ValidationErrorResponse;
+import com.sritel.billing.DTO.ValidationErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,9 +1,9 @@
-package com.billingService.billingService.Controller.v1;
+package com.sritel.billing.Controller.v1;
 
-import com.billingService.billingService.DTO.BillingDTO;
-import com.billingService.billingService.Service.BillingService;
-import com.billingService.billingService.Service.EmailService;
-import com.billingService.billingService.Entity.BillingDetails;
+import com.sritel.billing.DTO.BillingDTO;
+import com.sritel.billing.Service.BillingService;
+import com.sritel.billing.Service.EmailService;
+import com.sritel.billing.Entity.BillingDetails;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

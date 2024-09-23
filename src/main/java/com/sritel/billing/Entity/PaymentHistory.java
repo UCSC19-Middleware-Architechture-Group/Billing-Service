@@ -1,4 +1,4 @@
-package com.billingService.billingService.Entity;
+package com.sritel.billing.Entity;
 
 import jakarta.persistence.*;
 

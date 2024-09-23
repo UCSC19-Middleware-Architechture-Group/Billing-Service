@@ -1,18 +1,14 @@
-package com.billingService.billingService.Service;
+package com.sritel.billing.Service;
 
-import com.billingService.billingService.DTO.BillingDTO;
-import com.billingService.billingService.DTO.PaymentDTO;
-import com.billingService.billingService.Entity.*;
-import com.billingService.billingService.Repository.*;
-import jakarta.persistence.Column;
+import com.sritel.billing.DTO.BillingDTO;
+import com.sritel.billing.Entity.BillingDetails;
+import com.sritel.billing.Repository.BillingDetailsRepository;
+import com.sritel.billing.Repository.PaymentHistoryRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class BillingService {

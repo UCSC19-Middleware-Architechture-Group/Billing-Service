@@ -1,8 +1,8 @@
-package com.billingService.billingService.Service;
+package com.sritel.billing.Service;
 
-import com.billingService.billingService.DTO.PaymentDTO;
-import com.billingService.billingService.Entity.*;
-import com.billingService.billingService.Repository.*;
+import com.sritel.billing.DTO.PaymentDTO;
+import com.sritel.billing.Entity.PaymentHistory;
+import com.sritel.billing.Repository.PaymentHistoryRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

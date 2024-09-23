@@ -1,6 +1,6 @@
-package com.billingService.billingService.Repository;
+package com.sritel.billing.Repository;
 
-import com.billingService.billingService.Entity.BillingDetails;
+import com.sritel.billing.Entity.BillingDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

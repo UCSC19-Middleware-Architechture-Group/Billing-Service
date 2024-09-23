@@ -1,4 +1,4 @@
-package com.billingService.billingService.DTO;
+package com.sritel.billing.DTO;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

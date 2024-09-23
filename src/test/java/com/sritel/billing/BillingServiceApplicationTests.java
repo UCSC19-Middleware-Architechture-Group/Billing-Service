@@ -1,4 +1,4 @@
-package com.billingService.billingService;
+package com.sritel.billing;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

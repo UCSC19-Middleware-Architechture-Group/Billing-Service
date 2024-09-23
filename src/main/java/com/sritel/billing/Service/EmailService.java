@@ -1,7 +1,7 @@
-package com.billingService.billingService.Service;
+package com.sritel.billing.Service;
 
-import com.billingService.billingService.Entity.PaymentHistory;
-import com.billingService.billingService.Repository.PaymentHistoryRepository;
+import com.sritel.billing.Entity.PaymentHistory;
+import com.sritel.billing.Repository.PaymentHistoryRepository;
 import jakarta.mail.internet.MimeMessage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -16,7 +16,6 @@ import javax.mail.MessagingException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EmailService {
