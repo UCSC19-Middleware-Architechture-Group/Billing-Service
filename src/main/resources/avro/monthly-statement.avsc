@@ -1,0 +1,47 @@
+{
+  "type": "record",
+  "name": "MonthlyStatementEvent",
+  "namespace": "com.sritel.billing.event",
+  "fields": [
+    {
+      "name": "email",
+      "type": "string"
+    },
+    {
+      "name": "month",
+      "type": "string"
+    },
+    {
+      "name": "year",
+      "type": "string"
+    },
+    {
+      "name": "firstName",
+      "type": "string"
+    },
+    {
+      "name": "lastName",
+      "type": "string"
+    },
+    {
+      "name": "statementRecords",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "StatementRecord",
+          "fields": [
+            {
+              "name": "paymentDate",
+              "type": "string"
+            },
+            {
+              "name": "amount",
+              "type": "double"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

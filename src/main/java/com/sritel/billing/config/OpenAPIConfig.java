@@ -10,14 +10,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenAPIConfig {
     @Bean
-    public OpenAPI provisioningServiceAPI() {
+    public OpenAPI billingServiceAPI() {
         return new OpenAPI()
-                .info(new Info().title("Provisioning Service API")
-                        .description("This is the REST API for Provisioning Service")
+                .info(new Info().title("Billing Service API")
+                        .description("This is the REST API for Billing Service")
                         .version("1.0.0")
                         .license(new License().name("Apache 2.0")))
                 .externalDocs(new ExternalDocumentation()
-                        .description("You can refer tot he Provisioning Service Wiki Documentation")
-                        .url("https://provisioning-service-dummy-url.com/docs"));
+                        .description("You can refer tot he Billing Service Wiki Documentation")
+                        .url("https://billing-service-dummy-url.com/docs"));
     }
 }

@@ -1,82 +1,51 @@
 package com.sritel.billing.Service;
 
-import com.sritel.billing.Entity.PaymentHistory;
 import com.sritel.billing.Repository.PaymentHistoryRepository;
-import jakarta.mail.internet.MimeMessage;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import com.sritel.billing.event.MonthlyStatementEvent;
+import com.sritel.billing.event.StatementRecord;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
+@Transactional
 public class EmailService {
-
-    private final JavaMailSender mailSender;
     private final PaymentHistoryRepository paymentHistoryRepository;
+    private final KafkaTemplate<String, MonthlyStatementEvent> kafkaTemplate;
 
-    public EmailService(JavaMailSender mailSender, PaymentHistoryRepository paymentHistoryRepository) {
-        this.mailSender = mailSender;
-        this.paymentHistoryRepository = paymentHistoryRepository;
-    }
+    public void sendMonthlyStatement(String toEmail, Long userId) throws MessagingException, IOException, jakarta.mail.MessagingException {
 
-    public void sendMonthlyStatement(String toEmail, String subject, String body, Long userId) throws MessagingException, IOException, jakarta.mail.MessagingException {
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+        MonthlyStatementEvent monthlyStatementEvent = new MonthlyStatementEvent();
+        monthlyStatementEvent.setEmail(toEmail);
+        monthlyStatementEvent.setFirstName("Buddhika");
+        monthlyStatementEvent.setLastName("Senanayake");
+        monthlyStatementEvent.setYear("2024");
+        monthlyStatementEvent.setMonth("September");
 
-        helper.setTo(toEmail);
-        helper.setSubject(subject);
-        helper.setText(body, true);
+        List<StatementRecord> statementRecordList = paymentHistoryRepository.findByUserId(userId)
+                .stream()
+                .map(record -> {
+                    StatementRecord statementRecord = new StatementRecord();
+                    statementRecord.setAmount(record.getAmount().toBigInteger().doubleValue());
+                    statementRecord.setPaymentDate(record.getPaymentDate().toString());
+                    return statementRecord;
+                })
+                .toList();
 
-        // Generate PDF statement
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        generatePDFStatement(byteArrayOutputStream, userId);
 
-        // Attach the statement PDF
-        helper.addAttachment("Monthly_Statement.pdf", new ByteArrayResource(byteArrayOutputStream.toByteArray()));
+        monthlyStatementEvent.setStatementRecords(statementRecordList);
 
-        mailSender.send(mimeMessage);
-    }
+        log.info("Start - Sending MonthlyStatementEvent {} to kafka topic monthly-statement", monthlyStatementEvent);
+        kafkaTemplate.send("monthly-statement", monthlyStatementEvent);
+        log.info("End - Sending MonthlyStatementEvent {} to kafka topic monthly-statement", monthlyStatementEvent);
 
-    private void generatePDFStatement(ByteArrayOutputStream byteArrayOutputStream, Long userId) throws IOException {
-        try (PDDocument document = new PDDocument()) {
-            PDPage page = new PDPage();
-            document.addPage(page);
-
-            PDPageContentStream contentStream = new PDPageContentStream(document, page);
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
-            contentStream.beginText();
-            contentStream.newLineAtOffset(100, 700);
-            contentStream.showText("Monthly Statement for User ID: " + userId);
-
-            List<PaymentHistory> paymentHistory = paymentHistoryRepository.findByUserId(userId);
-
-            if (paymentHistory.isEmpty()) {
-                contentStream.endText();
-                contentStream.close();
-                document.save(byteArrayOutputStream);
-                return;
-            }
-
-            for(PaymentHistory payment : paymentHistory) {
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.showText("Amount: " + payment.getAmount());
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.showText("Date: " + payment.getPaymentDate());
-            }
-
-            contentStream.endText();
-            contentStream.close();
-
-            document.save(byteArrayOutputStream);
-        }
     }
 }
