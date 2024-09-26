@@ -9,8 +9,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.MessagingException;
-import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -21,7 +19,7 @@ public class EmailService {
     private final PaymentHistoryRepository paymentHistoryRepository;
     private final KafkaTemplate<String, MonthlyStatementEvent> kafkaTemplate;
 
-    public void sendMonthlyStatement(String toEmail, Long userId) throws MessagingException, IOException, jakarta.mail.MessagingException {
+    public void sendMonthlyStatement(String toEmail, Long userId) {
 
         MonthlyStatementEvent monthlyStatementEvent = new MonthlyStatementEvent();
         monthlyStatementEvent.setEmail(toEmail);

@@ -10,11 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.MessagingException;
-import java.io.IOException;
-
 @RestController
-@RequestMapping("/api/billing")
+@RequestMapping("/api/v1/billing")
 public class BillingController {
 
     @Autowired
@@ -44,15 +41,8 @@ public class BillingController {
 
     // Generate and email monthly statements
     @PostMapping("/email/statement")
-    public ResponseEntity<String> sendMonthlyStatement(@RequestParam String toEmail,
-                                                       @RequestParam Long userId) {
-        try {
-            emailService.sendMonthlyStatement(toEmail, userId);
-            return ResponseEntity.ok("Monthly statement sent successfully.");
-        } catch (MessagingException | IOException e) {
-            return ResponseEntity.status(500).body("Error sending email: " + e.getMessage());
-        } catch (jakarta.mail.MessagingException e) {
-            throw new RuntimeException(e);
-        }
+    public ResponseEntity<String> sendMonthlyStatement(@RequestParam String toEmail, @RequestParam Long userId) {
+        emailService.sendMonthlyStatement(toEmail, userId);
+        return ResponseEntity.ok("Monthly statement sent successfully.");
     }
 }
