@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/billing")
+@CrossOrigin
 public class BillingController {
 
     @Autowired
